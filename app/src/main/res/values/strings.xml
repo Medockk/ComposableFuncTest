@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ComposableFuncTest</string>
+    <string name="get_image">Get Image</string>
+    <string name="pick_image_from_gallery">Pick image from gallery</string>
+    <string name="take_a_photo">Take a photo</string>
+    <string name="pick_image">Pick image</string>
+</resources>
