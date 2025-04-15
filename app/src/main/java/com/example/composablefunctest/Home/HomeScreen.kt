@@ -39,6 +39,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.composablefunctest.R
 import com.example.composablefunctest.Route
+import com.example.composablefunctest.common.CustomAlertDialog
 import com.example.composablefunctest.common.CustomTopAppBar
 import kotlinx.coroutines.launch
 
@@ -72,13 +73,18 @@ fun HomeScreen(
         ),
     )
 
+    if (state.exception.isNotEmpty()){
+        CustomAlertDialog(state.exception) {
+            viewModel.onEvent(HomeEvent.ResetException)
+        }
+    }
+
 
     ModalNavigationDrawer(
         drawerState = modalDrawerState,
         drawerContent = {
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colorScheme.primary
-                    .copy(red = MaterialTheme.colorScheme.primary.red - 10f)
             ) {
                 modalDrawerSheetContent.forEach {
                     Row(
@@ -138,7 +144,9 @@ fun HomeScreen(
                 .background(MaterialTheme.colorScheme.primary),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CustomTopAppBar {
+            CustomTopAppBar(
+                userImage = state.userImage
+            ) {
                 coroutineScope.launch {
                     if (modalDrawerState.isOpen) {
                         modalDrawerState.close()

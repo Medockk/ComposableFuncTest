@@ -1,5 +1,10 @@
 package com.example.composablefunctest.ChangeImage
 
+import android.graphics.Bitmap
+
 data class ChangeImageState(
-    val isModalBottomSheetOpen: Boolean = true
+    val exception: String = "",
+    val isModalBottomSheetOpen: Boolean = true,
+
+    val image: Bitmap? = null,
 )

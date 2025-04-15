@@ -23,3 +23,4 @@ rootProject.name = "ComposableFuncTest"
 include(":app")
 include(":domain")
 include(":data")
+include(":di")
