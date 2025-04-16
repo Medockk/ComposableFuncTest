@@ -4,11 +4,8 @@ package com.example.composablefunctest.Drag
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.animation.core.DecayAnimationSpec
-import androidx.compose.animation.core.animateDecay
-import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.AnchoredDraggableState
@@ -27,6 +24,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,27 +52,33 @@ fun DragScreen(
 
     val state = viewModel.state.value
     val density = LocalDensity.current
+    val conf = LocalConfiguration.current.screenHeightDp.dp - 40.dp
+    val  w = with(density){conf.toPx()}
+    val width = remember { mutableStateOf((0f)) }
+    val t = 1000f
 
+    val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val anchoredDragState = remember {
-        AnchoredDraggableState(
-            initialValue = DragAnchors.START,
-            anchors = DraggableAnchors {
-                DragAnchors.START at 0f
-                DragAnchors.CENTER at state.dragWidth / 2f
-                DragAnchors.END at 1f
-            },
-            positionalThreshold = { t: Float ->
-                Log.e("drag", "drag at $t")
-                t
-            },
-            velocityThreshold = {
-                Log.e("velocity", "velocity")
-                with(density){10.dp.toPx()}
-                                },
-            snapAnimationSpec = snap(),
-            decayAnimationSpec = exponentialDecay()
+        mutableStateOf(
+            AnchoredDraggableState(
+                initialValue = DragAnchors.START,
+                anchors = DraggableAnchors {
+                    DragAnchors.START at 0f
+                    DragAnchors.CENTER at 0 / 2f
+                    DragAnchors.END at 0f
+                },
+                positionalThreshold = { t: Float ->
+                    t * 0.5f
+                },
+                velocityThreshold = {
+                    Float.POSITIVE_INFINITY
+                },
+                snapAnimationSpec = snap(),
+                decayAnimationSpec = decayAnimationSpec
+            )
         )
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -101,9 +107,26 @@ fun DragScreen(
                 .padding(horizontal = 20.dp)
                 .height(20.dp)
                 .onSizeChanged {
-                    Log.e("width", it.width.toString())
-                    viewModel.onEvent(DragEvent.SetDragSize(it.width))
-                },
+                    anchoredDragState.value =
+                        AnchoredDraggableState(
+                            initialValue = DragAnchors.START,
+                            anchors = DraggableAnchors {
+                                DragAnchors.START at 0f
+                                DragAnchors.CENTER at it.width / 2f
+                                DragAnchors.END at it.width.toFloat()
+                            },
+                            positionalThreshold = { t: Float ->
+                                t * 0.5f
+                            },
+                            velocityThreshold = {
+                                Float.POSITIVE_INFINITY
+                            },
+                            snapAnimationSpec = snap(),
+                            decayAnimationSpec = decayAnimationSpec
+                        )
+                    Log.e("onSize", it.width.toString())
+                }
+                .anchoredDraggable(anchoredDragState.value, Orientation.Horizontal),
             contentAlignment = Alignment.CenterStart
         ) {
             Box(
@@ -116,10 +139,9 @@ fun DragScreen(
                 modifier = Modifier
                     .offset {
                         IntOffset(
-                            anchoredDragState.requireOffset().roundToInt(), 0
+                            anchoredDragState.value.requireOffset().roundToInt(), 0
                         )
                     }
-                    .anchoredDraggable(anchoredDragState, Orientation.Horizontal)
                     .size(20.dp)
                     .background(MaterialTheme.colorScheme.primaryContainer)
             )
