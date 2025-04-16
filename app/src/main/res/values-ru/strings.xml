@@ -7,4 +7,13 @@
     <string name="pick_image">Pick image</string>
     <string name="pick_your_photo">Pick Your Photo</string>
     <string name="error">Error!</string>
+    <string name="change_your_name">Change Your Name</string>
+    <string name="save_changes">Save changes</string>
+    <string name="your_name">Your Name</string>
+    <string name="don_t_save_changes">Don\'t save changes</string>
+    <string name="some_changes_not_saved">Some changes not saved</string>
+    <string name="ignore_this_changes">Ignore this changes</string>
+    <string name="radio_button">Radio Button</string>
+    <string name="drag_screen">Drag Screen</string>
+    <string name="anchored_drag">Anchored Drag</string>
 </resources>

@@ -87,6 +87,7 @@ fun ChangeImageScreen(
     }
 
     if (state.exception.isNotEmpty()){
+
         CustomAlertDialog(state.exception) {
             viewModel.onEvent(ChangeImageEvent.ResetException)
         }

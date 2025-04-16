@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -34,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -57,9 +60,8 @@ fun HomeScreen(
     )
     val modalDrawerSheetContent = listOf(
         listOf(
-            Icons.Default.AccountCircle,
-            stringResource(R.string.get_image),
-            { navController.navigate(Route.ChangeImage.route) }
+            null,
+            state.userName
         ),
         listOf(
             Icons.Default.AccountCircle,
@@ -68,12 +70,22 @@ fun HomeScreen(
         ),
         listOf(
             Icons.Default.AccountCircle,
-            stringResource(R.string.get_image),
-            { navController.navigate(Route.ChangeImage.route) }
+            stringResource(R.string.change_your_name),
+            { navController.navigate(Route.ChangeName.route) }
+        ),
+        listOf(
+            ImageVector.vectorResource(R.drawable.radio_button_icon),
+            stringResource(R.string.radio_button),
+            { navController.navigate(Route.RadioButton.route) }
+        ),
+        listOf(
+            ImageVector.vectorResource(R.drawable.drag_icon),
+            stringResource(R.string.drag_screen),
+            { navController.navigate(Route.Drag.route) }
         ),
     )
 
-    if (state.exception.isNotEmpty()){
+    if (state.exception.isNotEmpty()) {
         CustomAlertDialog(state.exception) {
             viewModel.onEvent(HomeEvent.ResetException)
         }
@@ -86,49 +98,63 @@ fun HomeScreen(
             ModalDrawerSheet(
                 drawerContainerColor = MaterialTheme.colorScheme.primary
             ) {
-                modalDrawerSheetContent.forEach {
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 10.dp)
-                            .fillMaxWidth()
-                            .background(
-                                MaterialTheme.colorScheme.secondary,
-                                RoundedCornerShape(10.dp)
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 10.dp),
+                ) {
+                    items(modalDrawerSheetContent) {
+                        if (it[0] == null) {
+                            Text(
+                                text = it[1] as String,
+                                color = MaterialTheme.colorScheme.onPrimary,
                             )
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = ripple()
+                            Spacer(Modifier.height(20.dp))
+                        } else {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        MaterialTheme.colorScheme.secondary,
+                                        RoundedCornerShape(10.dp)
+                                    )
+                                    .clickable(
+                                        interactionSource = remember { MutableInteractionSource() },
+                                        indication = ripple()
+                                    ) {
+                                        coroutineScope.launch { modalDrawerState.close() }
+                                        (it[2] as () -> Unit).invoke()
+                                    },
+                                verticalAlignment = Alignment.CenterVertically
                             ) {
-                                coroutineScope.launch { modalDrawerState.close() }
-                                (it[2] as () -> Unit).invoke()
-                            },
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Spacer(Modifier.width(5.dp))
-                        Icon(
-                            imageVector = it[0] as ImageVector,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primaryContainer,
-                            modifier = Modifier
-                                .padding(vertical = 10.dp)
-                        )
-                        Spacer(Modifier.width(5.dp))
-                        Text(
-                            text = it[1] as String,
-                            color = MaterialTheme.colorScheme.primaryContainer
-                        )
-                    }
+                                Spacer(Modifier.width(5.dp))
+                                if (it[0] != null) {
+                                    Icon(
+                                        imageVector = it[0] as ImageVector,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.primaryContainer,
+                                        modifier = Modifier
+                                            .padding(vertical = 15.dp)
+                                    )
+                                    Spacer(Modifier.width(5.dp))
+                                    Text(
+                                        text = it[1] as String,
+                                        color = MaterialTheme.colorScheme.onPrimary
+                                    )
+                                }
+                            }
 
-                    Spacer(Modifier.height(10.dp))
-                    if (it != modalDrawerSheetContent.last()) {
-                        Spacer(
-                            Modifier
-                                .padding(horizontal = 10.dp)
-                                .height(1.dp)
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.secondary)
-                        )
-                        Spacer(Modifier.height(10.dp))
+                            Spacer(Modifier.height(10.dp))
+                            if (it != modalDrawerSheetContent.last()) {
+                                Spacer(
+                                    Modifier
+                                        .height(1.dp)
+                                        .fillMaxWidth()
+                                        .background(MaterialTheme.colorScheme.secondary)
+                                )
+                                Spacer(Modifier.height(10.dp))
+                            }
+                        }
                     }
                 }
             }

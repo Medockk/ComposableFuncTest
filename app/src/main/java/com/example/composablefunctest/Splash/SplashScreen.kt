@@ -30,7 +30,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.composablefunctest.R
 import com.example.composablefunctest.Route
-import com.example.composablefunctest.ui.theme.mainColor
 
 @Composable
 fun SplashScreen(

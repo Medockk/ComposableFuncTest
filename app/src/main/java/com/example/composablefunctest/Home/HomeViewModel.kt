@@ -33,7 +33,8 @@ class HomeViewModel @Inject constructor(
         if (userData?.userImage != null){
             withContext(Dispatchers.Main){
                 _state.value = state.value.copy(
-                    userImage = convertImageType(userData.userImage!!)
+                    userImage = convertImageType(userData.userImage!!),
+                    userName = userData.userName
                 )
             }
         }

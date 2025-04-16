@@ -30,24 +30,26 @@ import androidx.compose.ui.unit.dp
 fun CustomTopAppBar(
     modifier: Modifier = Modifier,
     title: String = "Home",
-    icon: ImageVector = Icons.Default.Menu,
+    icon: ImageVector? = Icons.Default.Menu,
     userImage: Bitmap? = null,
     navigationClick: () -> Unit
 ) {
     TopAppBar(
         modifier = modifier,
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = MaterialTheme.colorScheme.surface
         ),
         windowInsets = WindowInsets(0,0,0,0),
         navigationIcon = {
-            Icon(
-                imageVector = icon,
-                contentDescription = null,
-                tint = Color.White,
-                modifier = Modifier
-                    .clickable { navigationClick() }
-            )
+            if (icon != null){
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .clickable { navigationClick() }
+                )
+            }
         },
         title = {
             Text(
