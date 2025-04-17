@@ -9,5 +9,8 @@ import com.example.domain.model.UserDataModel
 data class UserDataModelImpl(
     @PrimaryKey override val id: Int? = 0,
     @ColumnInfo(defaultValue = "") override val userName: String = "",
-    override val userImage: ByteArray? = null
+    override val userImage: ByteArray? = null,
+    override val videoTime: Long = 0L,
+    override val radioButtonText: String = ""
+
 ) : UserDataModel

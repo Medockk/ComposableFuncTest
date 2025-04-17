@@ -8,4 +8,5 @@ sealed class Route(val route: String) {
     data object ChangeName: Route("ChangeName")
     data object RadioButton: Route("RadioButton")
     data object Drag: Route("Drag")
+    data object Video: Route("Video")
 }

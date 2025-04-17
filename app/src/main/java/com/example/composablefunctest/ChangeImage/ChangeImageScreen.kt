@@ -3,6 +3,7 @@
 
 package com.example.composablefunctest.ChangeImage
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -36,7 +37,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.composablefunctest.R
+import com.example.composablefunctest.Route
 import com.example.composablefunctest.common.CustomAlertDialog
 import com.example.composablefunctest.common.CustomButton
 import com.example.composablefunctest.common.CustomTopAppBar
@@ -65,6 +66,12 @@ fun ChangeImageScreen(
     val state = viewModel.state.value
     val modalBottomState = rememberModalBottomSheetState()
     val context = LocalContext.current
+
+    BackHandler {
+        navController.navigate(Route.Home.route){
+            popUpTo(Route.ChangeImage.route)
+        }
+    }
 
     val cameraPicker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
         if (it != null) {
@@ -118,7 +125,9 @@ fun ChangeImageScreen(
             title = stringResource(R.string.pick_image),
             icon = Icons.AutoMirrored.Default.KeyboardArrowLeft
         ) {
-            navController.popBackStack()
+            navController.navigate(Route.Home.route){
+                popUpTo(Route.ChangeImage.route)
+            }
         }
 
         if (state.image != null) {
@@ -180,7 +189,7 @@ fun ChangeImageScreen(
                                 Icon(
                                     imageVector = it[0] as ImageVector,
                                     contentDescription = null,
-                                    tint = Color.Black,
+                                    tint = MaterialTheme.colorScheme.onPrimary,
                                     modifier = Modifier
                                         .padding(5.dp)
                                         .fillMaxSize()

@@ -24,6 +24,26 @@ class DragViewModel @Inject constructor() : ViewModel() {
                     )
                 }
             }
+
+            is DragEvent.SetModifierDraggableOffset -> {
+                _state.value = state.value.copy(
+                    modifierDraggableOffset = event.value + _state.value.modifierDraggableOffset
+                )
+            }
+
+            is DragEvent.SetModifierTransformable -> {
+                _state.value = state.value.copy(
+                    modifierTransformableZoom = event.zoom * _state.value.modifierTransformableZoom,
+                    modifierTransformableOffset = event.offset + _state.value.modifierTransformableOffset,
+                    modifierTransformableRotation = event.rotation + _state.value.modifierTransformableRotation
+                )
+            }
+
+            is DragEvent.SetPointerInputOffset -> {
+                _state.value = state.value.copy(
+                    modifierPointerInput = event.value + _state.value.modifierPointerInput
+                )
+            }
         }
     }
 }

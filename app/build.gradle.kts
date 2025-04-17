@@ -39,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
     }
 }
 
@@ -49,6 +50,8 @@ dependencies {
     implementation(libs.widjet.glance)
     implementation(libs.coil)
     implementation(libs.navigation)
+    implementation(libs.video.player)
+    implementation(libs.video.ui)
 
     //di
     implementation(libs.hilt.android)

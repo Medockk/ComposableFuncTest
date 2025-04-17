@@ -15,4 +15,12 @@
     <string name="radio_button">Radio Button</string>
     <string name="drag_screen">Drag Screen</string>
     <string name="anchored_drag">Anchored Drag</string>
+    <string name="modifier_draggable">Modifier draggable</string>
+    <string name="modifier_swiping">Modifier Swiping</string>
+    <string name="modifier_multi_touch_gesture">Modifier Multi-Touch_Gesture</string>
+    <string name="modifier_pointer_input">Modifier Pointer Input After Long Press</string>
+    <string name="video_screen">Video Screen</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>

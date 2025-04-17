@@ -7,7 +7,11 @@ import com.example.data.repository.UserDataRepositoryImpl
 import com.example.domain.repository.UserDataRepository
 import com.example.domain.usecase.UserData.ChangeUserImageUseCase
 import com.example.domain.usecase.UserData.ChangeUserNameUseCase
+import com.example.domain.usecase.UserData.GetRadioButtonTextUseCase
 import com.example.domain.usecase.UserData.GetUserDataUseCase
+import com.example.domain.usecase.UserData.GetVideoTimeUseCase
+import com.example.domain.usecase.UserData.SetRadioButtonTextUseCase
+import com.example.domain.usecase.UserData.SetVideoTimeUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,5 +46,21 @@ object UserDataModule {
     @Provides @Singleton
     fun getUserData(userDataRepository: UserDataRepository) : GetUserDataUseCase{
         return GetUserDataUseCase(userDataRepository)
+    }
+    @Provides @Singleton
+    fun getVideoTimeUseCase(userDataRepository: UserDataRepository) : GetVideoTimeUseCase{
+        return GetVideoTimeUseCase(userDataRepository)
+    }
+    @Provides @Singleton
+    fun setVideoTimeUseCase(userDataRepository: UserDataRepository) : SetVideoTimeUseCase{
+        return SetVideoTimeUseCase(userDataRepository)
+    }
+    @Provides @Singleton
+    fun getRadioButtonTextUseCase(userDataRepository: UserDataRepository) : GetRadioButtonTextUseCase{
+        return GetRadioButtonTextUseCase(userDataRepository)
+    }
+    @Provides @Singleton
+    fun setRadioButtonTextUseCase(userDataRepository: UserDataRepository) : SetRadioButtonTextUseCase{
+        return SetRadioButtonTextUseCase(userDataRepository)
     }
 }

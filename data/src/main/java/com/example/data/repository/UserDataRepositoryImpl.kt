@@ -23,6 +23,21 @@ class UserDataRepositoryImpl(
         return userName
     }
 
+    override suspend fun getVideoTime(): Long {
+        createUserDatabase()
+
+        return userDataDao.getUserData()?.videoTime ?: 0L
+    }
+
+    override suspend fun setVideoTime(time: Long) {
+        createUserDatabase()
+
+        userDataDao.upsertUserData(
+            userDataDao.getUserData()!!
+                .copy(videoTime = time)
+        )
+    }
+
     override suspend fun getUseData(): UserDataModel? {
         createUserDatabase()
 
@@ -33,5 +48,20 @@ class UserDataRepositoryImpl(
         if (userDataDao.getUserData(id) == null){
             userDataDao.createUserDatabase(UserDataModelImpl(id))
         }
+    }
+
+    override suspend fun getRadioButtonText(): String {
+        createUserDatabase()
+
+        return userDataDao.getUserData()?.radioButtonText ?: ""
+    }
+
+    override suspend fun setRadioButtonText(text: String) {
+        createUserDatabase()
+
+        userDataDao.upsertUserData(
+            userDataDao.getUserData()!!
+                .copy(radioButtonText = text)
+        )
     }
 }

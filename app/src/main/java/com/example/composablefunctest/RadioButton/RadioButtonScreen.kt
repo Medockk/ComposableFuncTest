@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
@@ -41,7 +43,8 @@ fun RadioButtonScreen(
             .background(MaterialTheme.colorScheme.primary)
     ) {
         CustomTopAppBar(
-            title = stringResource(R.string.radio_button)
+            title = stringResource(R.string.radio_button),
+            icon = Icons.AutoMirrored.Default.KeyboardArrowLeft
         ) {
             navController.popBackStack()
         }

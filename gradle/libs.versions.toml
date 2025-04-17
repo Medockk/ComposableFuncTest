@@ -19,6 +19,7 @@ hiltNavigation = "1.2.0"
 
 navigation = "2.8.9"
 ksp = "2.0.21-1.0.27"
+video = "1.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,6 +44,8 @@ navigation = {module = "androidx.navigation:navigation-compose", version.ref = "
 widjet-glance = {module = "androidx.glance:glance-appwidget", version.ref = "widjetGlance"}
 coil = {group = "io.coil-kt", name = "coil-compose", version.ref = "coil"}
 hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigation" }
+video-player = {module = "androidx.media3:media3-exoplayer", version.ref = "video"}
+video-ui = {module = "androidx.media3:media3-ui", version.ref = "video"}
 
 #data
 room = { module = "androidx.room:room-ktx", version.ref = "room"}
