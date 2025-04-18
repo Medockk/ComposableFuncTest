@@ -24,4 +24,8 @@
     <string name="appwidget_text">exmple</string>
     <string name="add_widget">widget</string>
     <string name="app_widget_description">description</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="notifications">Notifications</string>
+    <string name="send_notification">Send Notification</string>
 </resources>

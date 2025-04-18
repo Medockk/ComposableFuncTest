@@ -74,7 +74,8 @@ fun ChangeNameScreen(
     ) {
         CustomTopAppBar(
             title = stringResource(R.string.change_your_name),
-            icon = null,
+            userImage = state.userImage,
+            icon = null
         ) {
             navController.popBackStack()
         }

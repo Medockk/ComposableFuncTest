@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -30,6 +31,7 @@ import com.example.composablefunctest.Drag.DragScreen
 import com.example.composablefunctest.Home.HomeScreen
 import com.example.composablefunctest.RadioButton.RadioButtonScreen
 import com.example.composablefunctest.Route
+import com.example.composablefunctest.SendNotification.SendNotificationScreen
 import com.example.composablefunctest.Splash.SplashScreen
 import com.example.composablefunctest.Video.VideoScreen
 import com.example.composablefunctest.ui.theme.ComposableFuncTestTheme
@@ -41,6 +43,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
+            val viewModel = hiltViewModel<MainActivityViewModel>()
 
             val navController = rememberNavController()
             ComposableFuncTestTheme(
@@ -84,6 +88,9 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Route.Video.route){
                                 VideoScreen(navController)
+                            }
+                            composable(Route.SendNotification.route){
+                                SendNotificationScreen(navController)
                             }
                         }
                         Spacer(Modifier.height(20.dp))

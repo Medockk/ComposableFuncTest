@@ -30,13 +30,15 @@ class HomeViewModel @Inject constructor(
     private suspend fun getUserData() {
         val userData = getUserDataUseCase()
 
-        if (userData?.userImage != null){
-            withContext(Dispatchers.Main){
-                _state.value = state.value.copy(
-                    userImage = convertImageType(userData.userImage!!),
-                    userName = userData.userName
-                )
-            }
+        withContext(Dispatchers.Main){
+            _state.value = state.value.copy(
+                userName = userData?.userName ?: "",
+                userImage = if (userData?.userImage != null){
+                    convertImageType(userData.userImage!!)
+                }else{
+                    null
+                }
+            )
         }
     }
 

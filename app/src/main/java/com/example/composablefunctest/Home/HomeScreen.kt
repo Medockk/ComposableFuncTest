@@ -88,6 +88,11 @@ fun HomeScreen(
             stringResource(R.string.video_screen),
             { navController.navigate(Route.Video.route) }
         ),
+        listOf(
+            ImageVector.vectorResource(R.drawable.notification_icon),
+            stringResource(R.string.notifications),
+            { navController.navigate(Route.SendNotification.route) }
+        ),
     )
 
     if (state.exception.isNotEmpty()) {
