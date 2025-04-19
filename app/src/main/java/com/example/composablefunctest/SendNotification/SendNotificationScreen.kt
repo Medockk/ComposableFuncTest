@@ -2,6 +2,7 @@
 
 package com.example.composablefunctest.SendNotification
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -29,6 +31,7 @@ fun SendNotificationScreen(
 ) {
 
     val state = viewModel.state.value
+    val activity = LocalActivity.current
     val tfList = listOf(
         listOf(
             stringResource(R.string.title),
@@ -41,6 +44,20 @@ fun SendNotificationScreen(
             {it: String -> viewModel.onEvent(SendNotificationEvent.EnterDescription(it))}
         ),
     )
+    val btnList = listOf(
+        listOf(
+            stringResource(R.string.send_notification),
+            {viewModel.onEvent(SendNotificationEvent.SendNotificationClick)}
+        ),
+        listOf(
+            stringResource(R.string.send_notification_after_1_minute),
+            {viewModel.onEvent(SendNotificationEvent.SendNotificationAfterOneMinuteClick)}
+        ),
+    )
+
+    LaunchedEffect(Unit) {
+        viewModel.onEvent(SendNotificationEvent.SetActivity(activity))
+    }
 
     Column(
         modifier = Modifier
@@ -68,14 +85,18 @@ fun SendNotificationScreen(
         }
 
         Spacer(Modifier.weight(1f))
-        CustomButton(
-            text = stringResource(R.string.send_notification),
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(55.dp)
-                .padding(horizontal = 20.dp)
-        ) {
-            viewModel.onEvent(SendNotificationEvent.SendNotificationClick)
+
+        btnList.forEach {
+            CustomButton(
+                text = it[0] as String,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(55.dp)
+                    .padding(horizontal = 20.dp)
+            ) {
+                (it[1] as () -> Unit).invoke()
+            }
+            Spacer(Modifier.height(10.dp))
         }
     }
 }

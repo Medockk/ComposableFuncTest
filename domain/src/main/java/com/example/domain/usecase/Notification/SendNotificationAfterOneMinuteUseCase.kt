@@ -3,14 +3,14 @@ package com.example.domain.usecase.Notification
 import android.content.Intent
 import com.example.domain.repository.NotificationRepository
 
-class SendNotificationUseCase(
+class SendNotificationAfterOneMinuteUseCase(
     private val notificationRepository: NotificationRepository
 ) {
 
     suspend operator fun invoke(
+        title: String,
+        description: String,
         icon: Int,
-        title: String = "Title",
-        description: String = "Description",
         intent: Intent
-    ) = notificationRepository.sendNotification(title, description, icon, intent)
+    )  = notificationRepository.sendNotificationAfterOneMinute(title, description, icon, intent)
 }

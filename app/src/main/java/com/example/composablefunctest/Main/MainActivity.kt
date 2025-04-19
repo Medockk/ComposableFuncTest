@@ -35,6 +35,8 @@ import com.example.composablefunctest.SendNotification.SendNotificationScreen
 import com.example.composablefunctest.Splash.SplashScreen
 import com.example.composablefunctest.Video.VideoScreen
 import com.example.composablefunctest.ui.theme.ComposableFuncTestTheme
+import com.example.domain.usecase.utils.NotificationKeys.ACTION_HOME
+import com.example.domain.usecase.utils.NotificationKeys.ACTION_NAME
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -47,6 +49,7 @@ class MainActivity : ComponentActivity() {
             val viewModel = hiltViewModel<MainActivityViewModel>()
 
             val navController = rememberNavController()
+
             ComposableFuncTestTheme(
                 dynamicColor = false
             ) {
@@ -59,7 +62,19 @@ class MainActivity : ComponentActivity() {
                     ) {
                         NavHost(
                             navController = navController,
-                            startDestination = Route.Splash.route,
+                            startDestination = when (intent.action) {
+                                ACTION_HOME -> {
+                                    Route.Home.route
+                                }
+
+                                ACTION_NAME -> {
+                                    Route.ChangeName.route
+                                }
+
+                                else -> {
+                                    Route.Splash.route
+                                }
+                            },
                             modifier = Modifier.weight(1f),
                             enterTransition = {
                                 fadeIn(tween(700, easing = LinearOutSlowInEasing))
@@ -67,29 +82,29 @@ class MainActivity : ComponentActivity() {
                             exitTransition = {
                                 fadeOut(tween(700, easing = LinearOutSlowInEasing))
                             }
-                        ){
-                            composable(Route.Splash.route){
+                        ) {
+                            composable(Route.Splash.route) {
                                 SplashScreen(navController)
                             }
-                            composable(Route.Home.route){
+                            composable(Route.Home.route) {
                                 HomeScreen(navController)
                             }
-                            composable(Route.ChangeImage.route){
+                            composable(Route.ChangeImage.route) {
                                 ChangeImageScreen(navController)
                             }
-                            composable(Route.ChangeName.route){
+                            composable(Route.ChangeName.route) {
                                 ChangeNameScreen(navController)
                             }
-                            composable(Route.RadioButton.route){
+                            composable(Route.RadioButton.route) {
                                 RadioButtonScreen(navController)
                             }
-                            composable(Route.Drag.route){
+                            composable(Route.Drag.route) {
                                 DragScreen(navController)
                             }
-                            composable(Route.Video.route){
+                            composable(Route.Video.route) {
                                 VideoScreen(navController)
                             }
-                            composable(Route.SendNotification.route){
+                            composable(Route.SendNotification.route) {
                                 SendNotificationScreen(navController)
                             }
                         }
