@@ -10,7 +10,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.domain.repository.NotificationRepository
 import com.example.domain.usecase.utils.NotificationKeys.ACTION_HOME
@@ -24,7 +23,8 @@ private var ICON: Int = 0
 
 class NotificationRepositoryImpl(
     private val context: Context,
-    private val notification: Notification.Builder
+    private val notification: Notification.Builder,
+    private val notificationChannel: NotificationChannel
 ) : NotificationRepository {
 
     @SuppressLint("MissingPermission")
@@ -35,12 +35,8 @@ class NotificationRepositoryImpl(
         intent: Intent
     ) {
 
-        val channel = NotificationChannel(
-            CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH
-        )
-
         val manager = context.getSystemService(NotificationManager::class.java)
-        manager.createNotificationChannel(channel)
+        manager.createNotificationChannel(notificationChannel)
 
         val pendingHomeIntent = PendingIntent.getActivity(
             context, 0, intent.apply { action = ACTION_HOME }, PendingIntent.FLAG_IMMUTABLE
@@ -86,7 +82,7 @@ class NotificationRepositoryImpl(
         )
 
         val calendar = Calendar.getInstance().apply {
-            set(Calendar.SECOND, 10)
+            set(Calendar.SECOND, LocalDateTime.now().second + 10)
         }
 
         manager.setExact(

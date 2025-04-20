@@ -19,23 +19,25 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.example.composablefunctest.Main.MainActivity
 import com.example.composablefunctest.common.WidgetKey
+import com.example.composablefunctest.ui.theme.mainColor
 
 private const val notRegisteredText = "You aren't registered!"
 
 @Composable
 fun WidgetContent(prefs: Preferences) {
 
-    val nameID = if ((prefs[WidgetKey.nameIdKey] ?: notRegisteredText).isBlank()) {
+    val userName = prefs[WidgetKey.nameIdKey]
+    val nameID = if (userName.isNullOrBlank()) {
         notRegisteredText
     } else {
-        prefs[WidgetKey.nameIdKey] ?: notRegisteredText
+        userName
     }
 
 
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary)
+            .background(mainColor)
             .clickable(actionStartActivity<MainActivity>()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalAlignment = Alignment.CenterVertically
