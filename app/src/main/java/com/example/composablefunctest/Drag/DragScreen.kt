@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -66,19 +67,24 @@ fun DragScreen(
                 initialValue = DragAnchors.START,
                 anchors = DraggableAnchors {
                     DragAnchors.START at 0f
-                    DragAnchors.CENTER at 0 / 2f
                     DragAnchors.END at 0f
                 },
                 positionalThreshold = { t: Float ->
-                    t * 0.5f
+                    t * 0.7f
                 },
                 velocityThreshold = {
                     Float.POSITIVE_INFINITY
                 },
-                snapAnimationSpec = tween(1000, easing = LinearOutSlowInEasing),
+                snapAnimationSpec = tween(),
                 decayAnimationSpec = decayAnimationSpec
             )
         )
+    }
+
+    LaunchedEffect(anchoredDragState.value.currentValue) {
+        if (anchoredDragState.value.currentValue == DragAnchors.END){
+            Log.e("e", "eeeeeeee")
+        }
     }
 
     Column(
@@ -115,9 +121,6 @@ fun DragScreen(
                             initialValue = DragAnchors.START,
                             anchors = DraggableAnchors {
                                 DragAnchors.START at 0f
-                                DragAnchors.START_CENTER at width / 4f
-                                DragAnchors.CENTER at width / 2f
-                                DragAnchors.CENTER_END at (width / 2f) * 1.5f
                                 DragAnchors.END at width
                             },
                             positionalThreshold = { t: Float ->
@@ -265,8 +268,5 @@ fun DragScreen(
 
 private enum class DragAnchors {
     START,
-    START_CENTER,
-    CENTER,
-    CENTER_END,
     END
 }
