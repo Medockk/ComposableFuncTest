@@ -3,6 +3,7 @@ package com.example.data.repository
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.Notification
+import android.app.Notification.Action
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -10,7 +11,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.core.app.NotificationManagerCompat
 import com.example.domain.repository.NotificationRepository
 import com.example.domain.usecase.utils.NotificationKeys.ACTION_HOME
 import com.example.domain.usecase.utils.NotificationKeys.ACTION_NAME
@@ -27,6 +27,8 @@ class NotificationRepositoryImpl(
     private val notificationChannel: NotificationChannel
 ) : NotificationRepository {
 
+    private val _notificationAssistant = NotificationAssistant(context)
+
     @SuppressLint("MissingPermission")
     override suspend fun sendNotification(
         title: String,
@@ -35,9 +37,6 @@ class NotificationRepositoryImpl(
         intent: Intent
     ) {
 
-        val manager = context.getSystemService(NotificationManager::class.java)
-        manager.createNotificationChannel(notificationChannel)
-
         val pendingHomeIntent = PendingIntent.getActivity(
             context, 0, intent.apply { action = ACTION_HOME }, PendingIntent.FLAG_IMMUTABLE
         )
@@ -45,23 +44,16 @@ class NotificationRepositoryImpl(
             context, 0, intent.apply { action = ACTION_NAME }, PendingIntent.FLAG_IMMUTABLE
         )
 
-        val homeAction = Notification.Action.Builder(
+        val homeAction = Action.Builder(
             icon, ACTION_HOME, pendingHomeIntent
         ).build()
-        val nameAction = Notification.Action.Builder(
+        val nameAction = Action.Builder(
             icon, ACTION_NAME, pendingNameIntent
         ).build()
 
-        val builder = notification
-            .setContentTitle(title)
-            .setContentText(description)
-            .setSmallIcon(icon)
-            .setAutoCancel(true)
-            .addAction(homeAction)
-            .addAction(nameAction)
-            .build()
-
-        NotificationManagerCompat.from(context).notify(1, builder)
+        _notificationAssistant.sendNotification(
+            title, description, icon, listOf(homeAction, nameAction)
+        )
 
     }
 
@@ -73,45 +65,105 @@ class NotificationRepositoryImpl(
     ) {
         ICON = icon
 
-        val manager = context.getSystemService(AlarmManager::class.java)
+        val manager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            0,
-            Intent(context, AlarmReceiver::class.java),
-            PendingIntent.FLAG_IMMUTABLE
+            1,
+            Intent(context, AlarmReceiver::class.java)
+                .putExtra("title", title)
+                .putExtra("description", description),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val calendar = Calendar.getInstance().apply {
-            set(Calendar.SECOND, LocalDateTime.now().second + 10)
+            set(Calendar.SECOND, LocalDateTime.now().second + 5)
         }
 
-        manager.setExact(
+        manager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
             pendingIntent
         )
-        Log.e("calendar", calendar.toString())
     }
 }
 
-private class AlarmReceiver : BroadcastReceiver() {
+class AlarmReceiver : BroadcastReceiver() {
 
     @SuppressLint("MissingPermission")
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        Log.e("receiver", "notif!!")
+        if (context != null && intent != null) {
+            val notificationAssistant = NotificationAssistant(context)
 
-        val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
-        context?.getSystemService(NotificationManager::class.java)?.createNotificationChannel(channel)
-        val manager = context?.getSystemService(NotificationManager::class.java)
+            notificationAssistant.sendNotification(
+                title = intent.extras?.getString("title") ?: "TITLE",
+                description = intent.extras?.getString("description") ?: "DESCRIPTION"
+            )
 
-        val notification = Notification.Builder(context, CHANNEL_ID)
-            .setSmallIcon(ICON)
-            .setContentTitle("title")
-            .setContentText("text")
+        } else if (context == null) {
+            Log.e("context", "context")
+        } else {
+            Log.e("intent", "intent")
+        }
+    }
+}
+
+private class NotificationAssistant(
+    private val context: Context
+) {
+
+    private val _manager = context.getSystemService(NotificationManager::class.java)
+
+    init {
+        val channel =
+            NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
+        _manager.createNotificationChannel(channel)
+    }
+
+    fun sendNotification(
+        title: String,
+        description: String,
+        icon: Int? = null,
+        intent: Intent? = null
+    ) {
+        val builder = Notification.Builder(context, CHANNEL_ID)
+            .setSmallIcon(icon ?: ICON)
+            .setContentTitle(title)
+            .setContentText(description)
+            .apply {
+                if (intent != null) {
+                    setContentIntent(
+                        PendingIntent.getActivity(
+                            context,
+                            1,
+                            intent,
+                            PendingIntent.FLAG_IMMUTABLE
+                        )
+                    )
+                }
+            }
             .build()
 
-        NotificationManagerCompat.from(context!!).notify(1, notification)
-        manager?.notify(1, notification)
+        _manager.notify(1, builder)
+    }
+
+    fun sendNotification(
+        title: String,
+        description: String,
+        icon: Int? = null,
+        intents: List<Action>
+    ) {
+        val builder = Notification.Builder(context, CHANNEL_ID)
+            .setSmallIcon(icon ?: ICON)
+            .setContentTitle(title)
+            .setContentText(description)
+            .apply {
+                intents.forEach {
+                    addAction(it)
+                }
+            }
+            .build()
+
+        _manager.notify(1, builder)
     }
 }

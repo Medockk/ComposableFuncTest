@@ -43,6 +43,8 @@ object NotificationModule {
         = Notification.Builder(context, CHANNEL_ID)
     @Provides
     @Singleton
-    fun getNotificationChannel(@ApplicationContext context: Context)
-        = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
+    fun getNotificationChannel(@ApplicationContext context: Context) : NotificationChannel{
+        val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
+        return channel
+    }
 }

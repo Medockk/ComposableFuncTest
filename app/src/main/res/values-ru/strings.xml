@@ -29,4 +29,5 @@
     <string name="notifications">Notifications</string>
     <string name="send_notification">Send Notification</string>
     <string name="send_notification_after_1_minute">Send notification after 1 minute</string>
+    <string name="custom_layout_screen">Custom layout screen</string>
 </resources>

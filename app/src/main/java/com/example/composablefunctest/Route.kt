@@ -9,5 +9,6 @@ sealed class Route(val route: String) {
     data object RadioButton: Route("RadioButton")
     data object Drag: Route("Drag")
     data object Video: Route("Video")
+    data object CustomLayout: Route("CustomLayout")
     data object SendNotification: Route("SendNotification")
 }

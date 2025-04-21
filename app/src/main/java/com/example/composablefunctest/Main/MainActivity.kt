@@ -8,6 +8,7 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +28,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.composablefunctest.ChangeImage.ChangeImageScreen
 import com.example.composablefunctest.ChangeName.ChangeNameScreen
+import com.example.composablefunctest.CustomLayout.CustomLayoutScreen
 import com.example.composablefunctest.Drag.DragScreen
 import com.example.composablefunctest.Home.HomeScreen
 import com.example.composablefunctest.RadioButton.RadioButtonScreen
@@ -107,8 +109,11 @@ class MainActivity : ComponentActivity() {
                             composable(Route.SendNotification.route) {
                                 SendNotificationScreen(navController)
                             }
+                            composable(Route.CustomLayout.route) {
+                                CustomLayoutScreen(navController)
+                            }
                         }
-                        Spacer(Modifier.height(20.dp))
+                        Spacer(Modifier.height(20.dp).background(MaterialTheme.colorScheme.primary))
                     }
                 }
             }

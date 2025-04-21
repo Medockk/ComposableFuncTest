@@ -93,6 +93,11 @@ fun HomeScreen(
             stringResource(R.string.notifications),
             { navController.navigate(Route.SendNotification.route) }
         ),
+        listOf(
+            ImageVector.vectorResource(R.drawable.custom_layout_icon),
+            stringResource(R.string.custom_layout_screen),
+            { navController.navigate(Route.CustomLayout.route) }
+        ),
     )
 
     if (state.exception.isNotEmpty()) {
