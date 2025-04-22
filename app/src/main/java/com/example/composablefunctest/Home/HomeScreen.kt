@@ -3,9 +3,14 @@
 
 package com.example.composablefunctest.Home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,9 +18,14 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -40,6 +50,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.composablefunctest.Home.components.CustomFloatingActionButton
+import com.example.composablefunctest.Home.components.CustomNavigationCard
 import com.example.composablefunctest.R
 import com.example.composablefunctest.Route
 import com.example.composablefunctest.common.CustomAlertDialog
@@ -58,10 +70,13 @@ fun HomeScreen(
     val modalDrawerState = rememberDrawerState(
         DrawerValue.Closed
     )
+    val lazyGridState = rememberLazyGridState()
+
     val modalDrawerSheetContent = listOf(
         listOf(
             null,
-            state.userName
+            state.userName,
+            {}
         ),
         listOf(
             Icons.Default.AccountCircle,
@@ -198,6 +213,45 @@ fun HomeScreen(
             }
 
             Spacer(Modifier.height(30.dp))
+
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp),
+                state = lazyGridState,
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(modalDrawerSheetContent.drop(1)) { item ->
+                    CustomNavigationCard(
+                        title = item[1] as String,
+                        onClick = item[2] as () -> Unit,
+                        modifier = Modifier
+                            .heightIn(100.dp),
+                        icon = item[0] as ImageVector
+                    )
+                }
+            }
+        }
+
+        AnimatedVisibility(
+            visible = lazyGridState.firstVisibleItemIndex != 0,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ){
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(end = 20.dp),
+                contentAlignment = Alignment.BottomEnd
+            ) {
+                CustomFloatingActionButton {
+                    coroutineScope.launch {
+                        lazyGridState.animateScrollToItem(0)
+                    }
+                }
+            }
         }
     }
 }

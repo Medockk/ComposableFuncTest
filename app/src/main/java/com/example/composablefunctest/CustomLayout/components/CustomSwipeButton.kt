@@ -3,6 +3,7 @@
 package com.example.composablefunctest.CustomLayout.components
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -48,7 +49,7 @@ fun CustomSwipeButton(
     val density = LocalDensity.current
     val thumbSize = 50f
 
-    val state = remember {
+    val state = remember(endLayoutValue) {
         AnchoredDraggableState(
             initialValue = CustomSwipeButton.START,
             anchors = DraggableAnchors {
@@ -56,6 +57,7 @@ fun CustomSwipeButton(
                 CustomSwipeButton.END at endLayoutValue
             },
             positionalThreshold = {
+                Log.e("pos", (it * 0.8f).toString())
                 it * 0.8f
             },
             velocityThreshold = {

@@ -12,7 +12,7 @@ val Pink40 = Color(0xFF7D5260)
 
 val primaryLight = Color(0xFFFFFFFF)
 val primaryDark = Color(0xFF080E1E)
-val secondaryLight = Color(0xFFD0BDBD)
+val secondaryLight = Color(0xFFEAE6E6)
 val secondaryDark = Color(0xFF797A83)
 
 val imageCircleIconColor = Color(0xFF797A83)
