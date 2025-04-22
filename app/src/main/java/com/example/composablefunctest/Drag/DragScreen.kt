@@ -2,10 +2,7 @@
 
 package com.example.composablefunctest.Drag
 
-import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -38,6 +35,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
@@ -49,9 +49,9 @@ import androidx.navigation.NavController
 import com.example.composablefunctest.Drag.components.CustomDraggableBox
 import com.example.composablefunctest.R
 import com.example.composablefunctest.common.CustomTopAppBar
+import com.example.composablefunctest.ui.theme.mainColor
 import kotlin.math.roundToInt
 
-@SuppressLint("RememberReturnType")
 @Composable
 fun DragScreen(
     navController: NavController,
@@ -59,6 +59,7 @@ fun DragScreen(
 ) {
 
     val state = viewModel.state.value
+    val trackWidth = remember { mutableStateOf(974f) }
 
     val decayAnimationSpec = rememberSplineBasedDecay<Float>()
     val anchoredDragState = remember {
@@ -67,7 +68,7 @@ fun DragScreen(
                 initialValue = DragAnchors.START,
                 anchors = DraggableAnchors {
                     DragAnchors.START at 0f
-                    DragAnchors.END at 0f
+                    DragAnchors.END at trackWidth.value
                 },
                 positionalThreshold = { t: Float ->
                     t * 0.7f
@@ -81,8 +82,18 @@ fun DragScreen(
         )
     }
 
+    LaunchedEffect(trackWidth.value) {
+//        delay(2000)
+//        anchoredDragState.value.updateAnchors(
+//            newAnchors = DraggableAnchors {
+//                DragAnchors.START to 0f
+//                DragAnchors.END to trackWidth.value
+//            }
+//        )
+    }
+
     LaunchedEffect(anchoredDragState.value.currentValue) {
-        if (anchoredDragState.value.currentValue == DragAnchors.END){
+        if (anchoredDragState.value.currentValue == DragAnchors.END) {
             Log.e("e", "eeeeeeee")
         }
     }
@@ -114,26 +125,31 @@ fun DragScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
                 .height(20.dp)
-                .onSizeChanged {
-                    val width = (it.width - 20).toFloat()
-                    anchoredDragState.value =
-                        AnchoredDraggableState(
-                            initialValue = DragAnchors.START,
-                            anchors = DraggableAnchors {
-                                DragAnchors.START at 0f
-                                DragAnchors.END at width
-                            },
-                            positionalThreshold = { t: Float ->
-                                t * 0.5f
-                            },
-                            velocityThreshold = {
-                                Float.POSITIVE_INFINITY
-                            },
-                            snapAnimationSpec = snap(),
-                            decayAnimationSpec = decayAnimationSpec
-                        )
+                .onSizeChanged { size ->
+                    trackWidth.value = size.width.toFloat()
+//                    anchoredDragState.value.updateAnchors(
+//                        DraggableAnchors {
+//                            DragAnchors.START to 0f
+//                            DragAnchors.END to size.width.toFloat()
+//                        }
+//                    )
                 }
-                .anchoredDraggable(anchoredDragState.value, Orientation.Horizontal),
+                .drawWithContent {
+
+                    drawContent()
+
+                    val progress = anchoredDragState
+                        .value.requireOffset() + 10f
+                    if (anchoredDragState.value.offset == 0f) {
+                        return@drawWithContent
+                    }else{
+                        drawRoundRect(
+                            mainColor,
+                            cornerRadius = CornerRadius(10f),
+                            size = Size(progress, size.height)
+                        )
+                    }
+                },
             contentAlignment = Alignment.CenterStart
         ) {
             Box(
@@ -143,11 +159,10 @@ fun DragScreen(
                     .background(MaterialTheme.colorScheme.onPrimary.copy(0.3f))
             )
             CustomDraggableBox(
-                Modifier
+                modifier = Modifier
+                    .anchoredDraggable(anchoredDragState.value, Orientation.Horizontal)
                     .offset {
-                        IntOffset(
-                            anchoredDragState.value.requireOffset().roundToInt(), 0
-                        )
+                        IntOffset(anchoredDragState.value.requireOffset().roundToInt(), 0)
                     }
             )
         }
@@ -210,7 +225,6 @@ fun DragScreen(
         ) {
             val transformableState =
                 rememberTransformableState { zoomChange, offsetChange, rotationChange ->
-                    Log.e("zoom", zoomChange.toString())
                     viewModel.onEvent(
                         DragEvent.SetModifierTransformable(
                             zoomChange,
@@ -221,8 +235,8 @@ fun DragScreen(
                 }
             CustomDraggableBox(
                 Modifier
-                    .sizeIn(40.dp)
-                    .heightIn(40.dp)
+                    .sizeIn(60.dp)
+                    .heightIn(60.dp)
                     .graphicsLayer {
                         scaleX = state.modifierTransformableZoom
                         scaleY = state.modifierTransformableZoom

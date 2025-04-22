@@ -19,6 +19,12 @@ class CustomLayoutViewModel @Inject constructor() : ViewModel() {
                     buttonOffset = _state.value.buttonOffset + event.value
                 )
             }
+
+            is CustomLayoutEvent.ChangeSizeWidth -> {
+                _state.value = state.value.copy(
+                    sizeWidth = event.value
+                )
+            }
         }
     }
 }

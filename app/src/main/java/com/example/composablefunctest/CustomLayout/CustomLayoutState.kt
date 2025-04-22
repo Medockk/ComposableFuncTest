@@ -1,7 +1,6 @@
 package com.example.composablefunctest.CustomLayout
 
-import androidx.compose.ui.geometry.Offset
-
 data class CustomLayoutState(
-    val buttonOffset: Float = 0f
+    val buttonOffset: Float = 0f,
+    val sizeWidth: Float = 0f,
 )
