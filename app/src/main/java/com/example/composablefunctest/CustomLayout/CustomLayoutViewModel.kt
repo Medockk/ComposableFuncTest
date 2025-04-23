@@ -25,6 +25,12 @@ class CustomLayoutViewModel @Inject constructor() : ViewModel() {
                     sizeWidth = event.value
                 )
             }
+
+            is CustomLayoutEvent.ChangeIsSwipeEndedState -> {
+                _state.value = state.value.copy(
+                    isSwipeEnded = event.value
+                )
+            }
         }
     }
 }

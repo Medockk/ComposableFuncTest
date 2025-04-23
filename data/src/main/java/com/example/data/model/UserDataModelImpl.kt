@@ -11,6 +11,8 @@ data class UserDataModelImpl(
     @ColumnInfo(defaultValue = "") override val userName: String = "",
     override val userImage: ByteArray? = null,
     override val videoTime: Long = 0L,
-    override val radioButtonText: String = ""
+    override val radioButtonText: String = "",
+    override val carouselItem: Int = 0,
 
-) : UserDataModel
+
+    ) : UserDataModel

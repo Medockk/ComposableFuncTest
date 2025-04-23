@@ -7,4 +7,5 @@ interface UserDataModel {
     val userImage: ByteArray?
     val videoTime: Long
     val radioButtonText: String
+    val carouselItem: Int
 }

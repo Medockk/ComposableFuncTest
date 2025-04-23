@@ -44,6 +44,22 @@ class UserDataRepositoryImpl(
         return userDataDao.getUserData()
     }
 
+    override suspend fun getCarouselItem(): Int {
+        createUserDatabase()
+
+        return userDataDao.getUserData()?.carouselItem ?: 0
+    }
+
+    override suspend fun setCarouselItem(item: Int) {
+        createUserDatabase()
+
+        userDataDao.upsertUserData(
+            userDataDao.getUserData()!!.copy(
+                carouselItem = item
+            )
+        )
+    }
+
     private fun createUserDatabase(id: Int? = 0) {
         if (userDataDao.getUserData(id) == null){
             userDataDao.createUserDatabase(UserDataModelImpl(id))

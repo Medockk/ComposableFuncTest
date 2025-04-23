@@ -14,4 +14,7 @@ interface UserDataRepository {
     suspend fun setRadioButtonText(text: String)
 
     suspend fun getUseData() : UserDataModel?
+
+    suspend fun getCarouselItem() : Int
+    suspend fun setCarouselItem(item: Int)
 }

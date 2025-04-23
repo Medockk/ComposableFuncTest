@@ -7,9 +7,11 @@ import com.example.data.repository.UserDataRepositoryImpl
 import com.example.domain.repository.UserDataRepository
 import com.example.domain.usecase.UserData.ChangeUserImageUseCase
 import com.example.domain.usecase.UserData.ChangeUserNameUseCase
+import com.example.domain.usecase.UserData.GetCarouselItemUseCase
 import com.example.domain.usecase.UserData.GetRadioButtonTextUseCase
 import com.example.domain.usecase.UserData.GetUserDataUseCase
 import com.example.domain.usecase.UserData.GetVideoTimeUseCase
+import com.example.domain.usecase.UserData.SetCarouselItemUseCase
 import com.example.domain.usecase.UserData.SetRadioButtonTextUseCase
 import com.example.domain.usecase.UserData.SetVideoTimeUseCase
 import dagger.Module
@@ -63,4 +65,12 @@ object UserDataModule {
     fun setRadioButtonTextUseCase(userDataRepository: UserDataRepository) : SetRadioButtonTextUseCase{
         return SetRadioButtonTextUseCase(userDataRepository)
     }
+    @Provides @Singleton
+    fun getCarouselItemUseCase(userDataRepository: UserDataRepository) =
+        GetCarouselItemUseCase(userDataRepository)
+
+    @Provides @Singleton
+    fun setCarouselItemUseCase(userDataRepository: UserDataRepository) =
+        SetCarouselItemUseCase(userDataRepository)
+
 }

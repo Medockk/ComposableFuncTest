@@ -113,6 +113,11 @@ fun HomeScreen(
             stringResource(R.string.custom_layout_screen),
             { navController.navigate(Route.CustomLayout.route) }
         ),
+        listOf(
+            ImageVector.vectorResource(R.drawable.carousel_icon),
+            stringResource(R.string.carousel),
+            { navController.navigate(Route.Carousel.route) }
+        ),
     )
 
     if (state.exception.isNotEmpty()) {

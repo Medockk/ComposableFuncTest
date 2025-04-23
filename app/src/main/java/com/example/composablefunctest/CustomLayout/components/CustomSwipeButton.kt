@@ -3,10 +3,10 @@
 package com.example.composablefunctest.CustomLayout.components
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
@@ -42,6 +42,7 @@ fun CustomSwipeButton(
     endContent: @Composable (progress: Float, currentPosition: CustomSwipeButton) -> Unit,
     centerContent: @Composable (progress: Float, currentPosition: CustomSwipeButton) -> Unit,
     trackContent: @Composable (progress: Float, currentPosition: CustomSwipeButton) -> Unit,
+    onSwipe: (currentPosition: CustomSwipeButton) -> Unit
 ) {
 
 
@@ -49,16 +50,15 @@ fun CustomSwipeButton(
     val density = LocalDensity.current
     val thumbSize = 50f
 
-    val state = remember(endLayoutValue) {
+    val state = remember {
         AnchoredDraggableState(
             initialValue = CustomSwipeButton.START,
             anchors = DraggableAnchors {
                 CustomSwipeButton.START at 0f
-                CustomSwipeButton.END at endLayoutValue
+                CustomSwipeButton.END at (endLayoutValue - thumbSize)
             },
-            positionalThreshold = {
-                Log.e("pos", (it * 0.8f).toString())
-                it * 0.8f
+            positionalThreshold = { progress ->
+                (progress * 0.8).toFloat()
             },
             velocityThreshold = {
                 with(density) {
@@ -74,9 +74,21 @@ fun CustomSwipeButton(
         state.updateAnchors(
             DraggableAnchors {
                 CustomSwipeButton.START at 0f
-                CustomSwipeButton.END at endLayoutValue
+                CustomSwipeButton.END at (endLayoutValue - with(density) { thumbSize.dp.toPx() })
             }
         )
+        state.dispatchRawDelta(1f)
+    }
+
+    LaunchedEffect(state.offset) {
+        if (state.offset != 0f && state.offset == state.anchors.maxAnchor()){
+            state.anchoredDrag(
+                dragPriority = MutatePriority.PreventUserInput
+            ) {
+                dragTo(it.positionOf(CustomSwipeButton.END))
+            }
+            onSwipe(state.currentValue)
+        }
     }
 
     Box(

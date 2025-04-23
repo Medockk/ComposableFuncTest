@@ -24,7 +24,10 @@ fun CustomButton(
         modifier = modifier,
         enabled = enabled,
         shape = RoundedCornerShape(10.dp),
-        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primaryContainer)
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
+        )
     ) {
         Text(
             text = text,
