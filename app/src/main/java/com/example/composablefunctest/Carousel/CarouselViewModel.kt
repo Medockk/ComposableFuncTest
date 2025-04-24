@@ -34,13 +34,13 @@ class CarouselViewModel @Inject constructor(
 
     private suspend fun getCarouselItem() {
         val data = getCarouselItemUseCase()
-        Log.e("data", data.toString())
 
         withContext(Dispatchers.Main) {
             _state.value = state.value.copy(
                 currentItem = data
             )
         }
+        Log.e("data", _state.value.currentItem.toString())
     }
 
     fun onEvent(event: CarouselEvent) {
@@ -58,6 +58,10 @@ class CarouselViewModel @Inject constructor(
 
                         }
                     }
+
+                    _state.value = state.value.copy(
+                        currentItem = event.value
+                    )
                 }
             }
         }
