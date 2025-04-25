@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -93,7 +94,7 @@ fun AnimationScreen(
     ) {
         CustomTopAppBar(
             title = stringResource(R.string.animation),
-            icon = null
+            icon = Icons.AutoMirrored.Default.KeyboardArrowLeft
         ) {
             navController.popBackStack()
         }

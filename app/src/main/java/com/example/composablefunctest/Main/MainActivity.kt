@@ -30,6 +30,7 @@ import com.example.composablefunctest.Animation.AnimationScreen
 import com.example.composablefunctest.Carousel.CarouselScreen
 import com.example.composablefunctest.ChangeImage.ChangeImageScreen
 import com.example.composablefunctest.ChangeName.ChangeNameScreen
+import com.example.composablefunctest.Configuration.ConfigurationScreen
 import com.example.composablefunctest.CustomLayout.CustomLayoutScreen
 import com.example.composablefunctest.Drag.DragScreen
 import com.example.composablefunctest.Home.HomeScreen
@@ -119,6 +120,9 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Route.Animation.route) {
                                 AnimationScreen(navController)
+                            }
+                            composable(Route.Configuration.route) {
+                                ConfigurationScreen(navController)
                             }
                         }
                         Spacer(Modifier.height(20.dp).background(MaterialTheme.colorScheme.primary))

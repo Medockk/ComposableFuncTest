@@ -31,6 +31,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -123,6 +124,11 @@ fun HomeScreen(
             Icons.Default.PlayArrow,
             stringResource(R.string.animation),
             { navController.navigate(Route.Animation.route) }
+        ),
+        listOf(
+            Icons.Default.Settings,
+            stringResource(R.string.configuration),
+            { navController.navigate(Route.Configuration.route) }
         ),
     )
 

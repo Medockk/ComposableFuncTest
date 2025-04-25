@@ -37,4 +37,7 @@
     <string name="slide_in_slide_out">Slide In + Slide Out</string>
     <string name="slide_in_horizontally_slide_out_horizontally">Slide In Horizontally + Slide Out Horizontally</string>
     <string name="slide_in_vertically_slide_out_vertically">Slide In Vertically + Slide Out Vertically</string>
+    <string name="configuration">Configuration</string>
+    <string name="light_theme">Light Theme</string>
+    <string name="dark_theme">Dark Theme</string>
 </resources>
