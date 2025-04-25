@@ -12,4 +12,5 @@ sealed class Route(val route: String) {
     data object CustomLayout: Route("CustomLayout")
     data object SendNotification: Route("SendNotification")
     data object Carousel: Route("Carousel")
+    data object Animation: Route("Animation")
 }

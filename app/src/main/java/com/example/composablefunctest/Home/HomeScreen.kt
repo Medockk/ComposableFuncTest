@@ -30,6 +30,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -117,6 +118,11 @@ fun HomeScreen(
             ImageVector.vectorResource(R.drawable.carousel_icon),
             stringResource(R.string.carousel),
             { navController.navigate(Route.Carousel.route) }
+        ),
+        listOf(
+            Icons.Default.PlayArrow,
+            stringResource(R.string.animation),
+            { navController.navigate(Route.Animation.route) }
         ),
     )
 

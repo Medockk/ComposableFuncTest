@@ -26,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.composablefunctest.Animation.AnimationScreen
 import com.example.composablefunctest.Carousel.CarouselScreen
 import com.example.composablefunctest.ChangeImage.ChangeImageScreen
 import com.example.composablefunctest.ChangeName.ChangeNameScreen
@@ -115,6 +116,9 @@ class MainActivity : ComponentActivity() {
                             }
                             composable(Route.Carousel.route) {
                                 CarouselScreen(navController)
+                            }
+                            composable(Route.Animation.route) {
+                                AnimationScreen(navController)
                             }
                         }
                         Spacer(Modifier.height(20.dp).background(MaterialTheme.colorScheme.primary))

@@ -32,4 +32,10 @@
     <string name="custom_layout_screen">Custom layout screen</string>
     <string name="swipe_to_confirm">Swipe to confirm</string>
     <string name="carousel">Carousel</string>
+    <string name="animation">Animation</string>
+    <string name="fade_in_fade_out">Fade In + Fade Out</string>
+    <string name="scale_in_scale_out">Scale In + Scale Out</string>
+    <string name="slide_in_slide_out">Slide In + Slide Out</string>
+    <string name="slide_in_horizontally_slide_out_horizontally">Slide In Horizontally + Slide Out Horizontally</string>
+    <string name="slide_in_vertically_slide_out_vertically">Slide In Vertically + Slide Out Vertically</string>
 </resources>
