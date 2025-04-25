@@ -15,16 +15,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -38,7 +35,6 @@ import androidx.navigation.NavController
 import com.example.composablefunctest.R
 import com.example.composablefunctest.common.CustomButton
 import com.example.composablefunctest.common.CustomTopAppBar
-import kotlinx.coroutines.launch
 
 @Composable
 fun CarouselScreen(
@@ -48,13 +44,20 @@ fun CarouselScreen(
 
     val state = viewModel.state.value
     val pagerState = rememberPagerState(
-        initialPage = state.currentItem
+        state.currentItem
     ) { state.items.size }
     Log.e("data1", state.currentItem.toString())
-    val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
-        pagerState.scrollToPage(state.currentItem)
+    LaunchedEffect(state.currentItem) {
+        pagerState.animateScrollToPage(state.currentItem,
+            animationSpec = tween(700)
+        )
+    }
+
+    LaunchedEffect(pagerState.isScrollInProgress) {
+        if (!pagerState.isScrollInProgress){
+            viewModel.onEvent(CarouselEvent.SetCarouselItem(pagerState.currentPage))
+        }
     }
 
     Column(
@@ -112,13 +115,6 @@ fun CarouselScreen(
                 modifier = Modifier
                     .weight(1f)
             ) {
-                coroutineScope.launch {
-                    pagerState.animateScrollToPage(
-                        state.currentItem - 1,
-                        animationSpec = tween(700)
-                    )
-                }
-
                 viewModel.onEvent(CarouselEvent.SetCarouselItem(state.currentItem - 1))
             }
             Spacer(Modifier.width(15.dp))
@@ -127,13 +123,6 @@ fun CarouselScreen(
                 modifier = Modifier
                     .weight(1f)
             ) {
-                coroutineScope.launch {
-                    pagerState.animateScrollToPage(
-                        state.currentItem + 1,
-                        animationSpec = tween(700)
-                    )
-                }
-
                 viewModel.onEvent(CarouselEvent.SetCarouselItem(state.currentItem + 1))
             }
         }
