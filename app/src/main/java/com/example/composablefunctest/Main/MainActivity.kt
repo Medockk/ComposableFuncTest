@@ -9,6 +9,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -52,11 +53,16 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val viewModel = hiltViewModel<MainActivityViewModel>()
+            val state = viewModel.state.value
 
             val navController = rememberNavController()
 
             ComposableFuncTestTheme(
-                dynamicColor = false
+                dynamicColor = false,
+                darkTheme =
+                    if (state.appTheme == null) isSystemInDarkTheme()
+                    else if (state.appTheme) true
+                    else false
             ) {
                 window.statusBarColor = MaterialTheme.colorScheme.primaryContainer.toArgb()
 
@@ -122,7 +128,9 @@ class MainActivity : ComponentActivity() {
                                 AnimationScreen(navController)
                             }
                             composable(Route.Configuration.route) {
-                                ConfigurationScreen(navController)
+                                ConfigurationScreen(navController) { theme ->
+                                    viewModel.setAppTheme(theme)
+                                }
                             }
                         }
                         Spacer(Modifier.height(20.dp).background(MaterialTheme.colorScheme.primary))
