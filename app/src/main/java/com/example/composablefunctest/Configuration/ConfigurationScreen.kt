@@ -16,6 +16,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -63,6 +64,10 @@ fun ConfigurationScreen(
         ),
     )
 
+    LaunchedEffect(Unit) {
+        viewModel.onEvent(ConfigurationEvent.SetChangeThemeClick(changeTheme))
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -89,8 +94,6 @@ fun ConfigurationScreen(
                     icon = it[1] as ImageVector,
                     onClick = {
                         (it[2] as () -> Unit).invoke()
-
-                        changeTheme.invoke(viewModel.getAppTheme())
                     },
                     modifier = Modifier
                         .weight(1f),

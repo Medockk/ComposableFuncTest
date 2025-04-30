@@ -66,14 +66,14 @@ class ConfigurationViewModel @Inject constructor(
         when (event){
             is ConfigurationEvent.SetTheme -> {
                 viewModelScope.launch(Dispatchers.IO){
+                    withContext(Dispatchers.Main){
+                        _state.value = state.value.copy(
+                            appTheme = event.theme
+                        )
+                    }
                     try {
                         setApplicationThemeUseCase.invoke(event.theme)
-
-                        withContext(Dispatchers.Main){
-                            _state.value = state.value.copy(
-                                appTheme = event.theme
-                            )
-                        }
+                        _state.value.themeClick.invoke(event.theme)
                     } catch (e: Exception) {
                         _state.value = state.value.copy(
                             exception = e.message.toString()
@@ -81,9 +81,12 @@ class ConfigurationViewModel @Inject constructor(
                     }
                 }
             }
+
+            is ConfigurationEvent.SetChangeThemeClick -> {
+                _state.value = state.value.copy(
+                    themeClick = event.onClick
+                )
+            }
         }
     }
-
-    fun getAppTheme() : Boolean? =
-        _state.value.appTheme
 }

@@ -8,4 +8,5 @@ sealed class ConfigurationEvent {
      * or null, when the app using the system theme
      */
     data class SetTheme(val theme: Boolean?) : ConfigurationEvent()
+    data class SetChangeThemeClick(val onClick: (Boolean?) -> Unit) : ConfigurationEvent()
 }
