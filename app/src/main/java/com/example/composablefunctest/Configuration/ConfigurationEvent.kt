@@ -9,4 +9,6 @@ sealed class ConfigurationEvent {
      */
     data class SetTheme(val theme: Boolean?) : ConfigurationEvent()
     data class SetChangeThemeClick(val onClick: (Boolean?) -> Unit) : ConfigurationEvent()
+
+    data class SetLanguage(val value: LanguageList) : ConfigurationEvent()
 }

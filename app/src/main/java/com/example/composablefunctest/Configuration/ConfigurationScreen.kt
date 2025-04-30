@@ -25,6 +25,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.composablefunctest.Configuration.components.CustomLanguageCard
 import com.example.composablefunctest.Configuration.components.CustomThemeCard
 import com.example.composablefunctest.R
 import com.example.composablefunctest.common.CustomTopAppBar
@@ -64,6 +65,21 @@ fun ConfigurationScreen(
         ),
     )
 
+    val languageList = listOf(
+        listOf(
+            stringResource(R.string.english),
+            {
+                viewModel.onEvent(ConfigurationEvent.SetLanguage(LanguageList.English))
+            }
+        ),
+        listOf(
+            stringResource(R.string.russian),
+            {
+                viewModel.onEvent(ConfigurationEvent.SetLanguage(LanguageList.Russian))
+            }
+        ),
+    )
+
     LaunchedEffect(Unit) {
         viewModel.onEvent(ConfigurationEvent.SetChangeThemeClick(changeTheme))
     }
@@ -100,6 +116,29 @@ fun ConfigurationScreen(
                     isSelected = it[3] as Boolean,
                 )
                 if (it != themeContent.last()){
+                    Spacer(Modifier.width(20.dp))
+                }
+            }
+        }
+
+        Spacer(Modifier.height(30.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            languageList.forEach {
+                CustomLanguageCard(
+                    title = it[0] as String,
+                    onClick = it[1] as () -> Unit,
+                    isSelected = (it[0] as String) == state.currentLanguage,
+                    modifier = Modifier
+                        .weight(1f)
+                )
+
+                if (it != languageList.last()){
                     Spacer(Modifier.width(20.dp))
                 }
             }

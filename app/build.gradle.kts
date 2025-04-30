@@ -52,6 +52,8 @@ dependencies {
     implementation(libs.navigation)
     implementation(libs.video.player)
     implementation(libs.video.ui)
+    //Localize
+    implementation(libs.androidx.appcompat)
 
     //di
     implementation(libs.hilt.android)

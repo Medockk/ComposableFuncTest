@@ -6,4 +6,10 @@ data class ConfigurationState(
     val showIndication: Boolean = false,
 
     val themeClick: (Boolean?) -> Unit = {},
+    val currentLanguage: String = "",
 )
+
+sealed class LanguageList {
+    data object English : LanguageList()
+    data object Russian : LanguageList()
+}
