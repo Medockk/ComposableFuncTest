@@ -1,5 +1,6 @@
 package com.example.composablefunctest.Configuration.components
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,7 +35,7 @@ fun CustomThemeCard(
             containerColor = if (isSelected){
                 MaterialTheme.colorScheme.primaryContainer
             }else{
-                MaterialTheme.colorScheme.onPrimary
+                MaterialTheme.colorScheme.secondary
             }
         )
     ) {

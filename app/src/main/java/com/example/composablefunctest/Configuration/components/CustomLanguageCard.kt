@@ -33,8 +33,8 @@ fun CustomLanguageCard(
         ) {
             Text(
                 text = title,
-                color = if (isSelected) MaterialTheme.colorScheme.primary
-                else MaterialTheme.colorScheme.onPrimary
+                color = if (isSelected) MaterialTheme.colorScheme.onPrimary
+                else MaterialTheme.colorScheme.primary
             )
         }
     }

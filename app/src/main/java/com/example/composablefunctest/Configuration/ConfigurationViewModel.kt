@@ -16,7 +16,6 @@ import com.example.domain.usecase.Configuration.SetApplicationThemeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -32,9 +31,10 @@ class ConfigurationViewModel @Inject constructor(
     val state: State<ConfigurationState> = _state
 
     init {
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 getTheme()
+                getLocale()
             } catch (e: Exception) {
                 _state.value = state.value.copy(
                     exception = e.message.toString()
@@ -43,23 +43,34 @@ class ConfigurationViewModel @Inject constructor(
         }
     }
 
+    private suspend fun getLocale() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            setCurrentLanguage(context.getSystemService(LocaleManager::class.java)
+                .applicationLocales.toLanguageTags())
+        } else {
+            setCurrentLanguage(AppCompatDelegate.getApplicationLocales().toLanguageTags())
+        }
+    }
+
     private suspend fun getTheme() {
         val theme = getApplicationThemeUseCase.invoke()
 
         theme.collect {
-            when (it){
+            when (it) {
                 is NetworkResult.Error<*> -> {
                     _state.value = state.value.copy(
                         exception = it.message ?: "Unknown error..."
                     )
                 }
+
                 is NetworkResult.Loading<*> -> {
                     _state.value = state.value.copy(
                         showIndication = true
                     )
                 }
+
                 is NetworkResult.Success<*> -> {
-                    withContext(Dispatchers.Main){
+                    withContext(Dispatchers.Main) {
                         _state.value = state.value.copy(
                             appTheme = it.data,
                             showIndication = false
@@ -70,11 +81,11 @@ class ConfigurationViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: ConfigurationEvent){
-        when (event){
+    fun onEvent(event: ConfigurationEvent) {
+        when (event) {
             is ConfigurationEvent.SetTheme -> {
-                viewModelScope.launch(Dispatchers.IO){
-                    withContext(Dispatchers.Main){
+                viewModelScope.launch(Dispatchers.IO) {
+                    withContext(Dispatchers.Main) {
                         _state.value = state.value.copy(
                             appTheme = event.theme
                         )
@@ -97,13 +108,14 @@ class ConfigurationViewModel @Inject constructor(
             }
 
             is ConfigurationEvent.SetLanguage -> {
-                with(context){
+                with(context) {
                     _state.value = state.value.copy(
-                        currentLanguage = when (event.value){
+                        currentLanguage = when (event.value) {
                             LanguageList.English -> {
                                 setLocale("en")
                                 "English"
                             }
+
                             LanguageList.Russian -> {
                                 setLocale("ru")
                                 "Русский"
@@ -116,12 +128,24 @@ class ConfigurationViewModel @Inject constructor(
     }
 
     private fun Context.setLocale(localeTag: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             getSystemService(LocaleManager::class.java).applicationLocales =
                 LocaleList.forLanguageTags(localeTag)
-        }else{
+        } else {
             AppCompatDelegate.setApplicationLocales(
                 LocaleListCompat.forLanguageTags(localeTag)
+            )
+        }
+    }
+
+    private suspend fun setCurrentLanguage(languageTag: String) {
+        withContext(Dispatchers.Main) {
+            _state.value = state.value.copy(
+                currentLanguage = when (languageTag) {
+                    "en" -> "English"
+                    "ru" -> "Русский"
+                    else -> ""
+                }
             )
         }
     }
