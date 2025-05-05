@@ -1,5 +1,7 @@
 package com.example.composablefunctest.Configuration
 
+import android.app.Activity
+
 sealed class ConfigurationEvent {
 
     /**
@@ -11,4 +13,8 @@ sealed class ConfigurationEvent {
     data class SetChangeThemeClick(val onClick: (Boolean?) -> Unit) : ConfigurationEvent()
 
     data class SetLanguage(val value: LanguageList) : ConfigurationEvent()
+    data class ChangeOrientation(
+        val activity: Activity?, val orientations: Int
+    ) : ConfigurationEvent()
+    data class ChangeBrightness(val value: Float) : ConfigurationEvent()
 }

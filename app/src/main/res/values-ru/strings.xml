@@ -44,4 +44,6 @@
     <string name="system_theme">Системная тема</string>
     <string name="english">Английский</string>
     <string name="russian">Русский</string>
+    <string name="horizontal">Горизонтальный</string>
+    <string name="vertical">Вертикальный</string>
 </resources>

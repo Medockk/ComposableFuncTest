@@ -82,16 +82,6 @@ fun DragScreen(
         )
     }
 
-    LaunchedEffect(trackWidth.value) {
-//        delay(2000)
-//        anchoredDragState.value.updateAnchors(
-//            newAnchors = DraggableAnchors {
-//                DragAnchors.START to 0f
-//                DragAnchors.END to trackWidth.value
-//            }
-//        )
-    }
-
     LaunchedEffect(anchoredDragState.value.currentValue) {
         if (anchoredDragState.value.currentValue == DragAnchors.END) {
             Log.e("e", "eeeeeeee")

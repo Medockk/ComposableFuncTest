@@ -7,6 +7,8 @@ data class ConfigurationState(
 
     val themeClick: (Boolean?) -> Unit = {},
     val currentLanguage: String = "",
+
+    val brightness: Float = 0f,
 )
 
 sealed class LanguageList {

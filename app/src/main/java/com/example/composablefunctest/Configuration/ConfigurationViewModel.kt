@@ -45,8 +45,10 @@ class ConfigurationViewModel @Inject constructor(
 
     private suspend fun getLocale() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            setCurrentLanguage(context.getSystemService(LocaleManager::class.java)
-                .applicationLocales.toLanguageTags())
+            setCurrentLanguage(
+                context.getSystemService(LocaleManager::class.java)
+                    .applicationLocales.toLanguageTags()
+            )
         } else {
             setCurrentLanguage(AppCompatDelegate.getApplicationLocales().toLanguageTags())
         }
@@ -123,6 +125,16 @@ class ConfigurationViewModel @Inject constructor(
                         }
                     )
                 }
+            }
+
+            is ConfigurationEvent.ChangeOrientation -> {
+                event.activity?.requestedOrientation = event.orientations
+            }
+
+            is ConfigurationEvent.ChangeBrightness -> {
+                _state.value = state.value.copy(
+                    brightness = _state.value.brightness + event.value
+                )
             }
         }
     }

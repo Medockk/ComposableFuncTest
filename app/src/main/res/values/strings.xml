@@ -43,4 +43,6 @@
     <string name="system_theme">System Theme</string>
     <string name="english">English</string>
     <string name="russian">Russian</string>
+    <string name="horizontal">Horizontal</string>
+    <string name="vertical">Vertical</string>
 </resources>

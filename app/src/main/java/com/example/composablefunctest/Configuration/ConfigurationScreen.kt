@@ -1,7 +1,10 @@
 @file:Suppress("UNCHECKED_CAST")
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.example.composablefunctest.Configuration
 
+import android.content.pm.ActivityInfo
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.composablefunctest.Configuration.components.CustomLanguageCard
+import com.example.composablefunctest.Configuration.components.CustomSlider
 import com.example.composablefunctest.Configuration.components.CustomThemeCard
 import com.example.composablefunctest.R
 import com.example.composablefunctest.common.CustomTopAppBar
@@ -38,6 +43,8 @@ fun ConfigurationScreen(
 ) {
 
     val state = viewModel.state.value
+    val activity = LocalActivity.current
+
     val themeContent = listOf(
         listOf(
             stringResource(R.string.system_theme),
@@ -80,6 +87,29 @@ fun ConfigurationScreen(
         ),
     )
 
+    val orientationList = listOf(
+        listOf(
+            stringResource(R.string.horizontal),
+            {
+                viewModel.onEvent(
+                    ConfigurationEvent.ChangeOrientation(
+                        activity, ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    )
+                )
+            },
+        ),
+        listOf(
+            stringResource(R.string.vertical),
+            {
+                viewModel.onEvent(
+                    ConfigurationEvent.ChangeOrientation(
+                        activity, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                    )
+                )
+            }
+        )
+    )
+
     LaunchedEffect(Unit) {
         viewModel.onEvent(ConfigurationEvent.SetChangeThemeClick(changeTheme))
     }
@@ -115,7 +145,7 @@ fun ConfigurationScreen(
                         .weight(1f),
                     isSelected = it[3] as Boolean,
                 )
-                if (it != themeContent.last()){
+                if (it != themeContent.last()) {
                     Spacer(Modifier.width(20.dp))
                 }
             }
@@ -138,10 +168,71 @@ fun ConfigurationScreen(
                         .weight(1f)
                 )
 
-                if (it != languageList.last()){
+                if (it != languageList.last()) {
                     Spacer(Modifier.width(20.dp))
                 }
             }
+        }
+
+        Spacer(Modifier.height(30.dp))
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            orientationList.forEach {
+                CustomLanguageCard(
+                    title = it[0] as String,
+                    onClick = it[1] as () -> Unit,
+                    modifier = Modifier
+                        .weight(1f)
+                )
+
+                if (it != orientationList.last()) {
+                    Spacer(Modifier.width(20.dp))
+                }
+            }
+        }
+
+        Spacer(Modifier.height(30.dp))
+
+//        Slider(
+//            value = state.brightness,
+//            onValueChange = {
+//                viewModel.onEvent(ConfigurationEvent.ChangeBrightness(it))
+//            },
+//            thumb = {
+//                Box(Modifier.size(24.dp).background(MaterialTheme.colorScheme.onPrimary, CircleShape))
+//                SliderDefaults.Thumb(
+//                    interactionSource = remember { MutableInteractionSource() },
+//                    thumbSize = DpSize(24.dp, 24.dp),
+//                    colors = SliderDefaults.colors(
+//                        MaterialTheme.colorScheme.onPrimary
+//                    ),
+//                    modifier = Modifier
+//                        .size(24.dp)
+//                        .background(MaterialTheme.colorScheme.onPrimary, CircleShape)
+//                )
+//            },
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(horizontal = 20.dp),
+//            colors = SliderDefaults.colors(
+//                thumbColor = MaterialTheme.colorScheme.onPrimary,
+//                activeTrackColor = MaterialTheme.colorScheme.primaryContainer,
+//                inactiveTrackColor = MaterialTheme.colorScheme.onPrimary.copy(0.5f)
+//            )
+//        )
+
+        CustomSlider(
+            value = state.brightness,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+        ) {
+            viewModel.onEvent(ConfigurationEvent.ChangeBrightness(it))
         }
     }
 }
