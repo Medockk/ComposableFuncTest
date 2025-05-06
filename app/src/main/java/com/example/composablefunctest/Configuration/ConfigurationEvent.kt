@@ -16,5 +16,8 @@ sealed class ConfigurationEvent {
     data class ChangeOrientation(
         val activity: Activity?, val orientations: Int
     ) : ConfigurationEvent()
-    data class ChangeBrightness(val value: Float) : ConfigurationEvent()
+
+    data class ChangeBrightness(
+        val value: Float, val activity: Activity?
+    ) : ConfigurationEvent()
 }

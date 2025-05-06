@@ -19,6 +19,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -198,33 +199,14 @@ fun ConfigurationScreen(
 
         Spacer(Modifier.height(30.dp))
 
-//        Slider(
-//            value = state.brightness,
-//            onValueChange = {
-//                viewModel.onEvent(ConfigurationEvent.ChangeBrightness(it))
-//            },
-//            thumb = {
-//                Box(Modifier.size(24.dp).background(MaterialTheme.colorScheme.onPrimary, CircleShape))
-//                SliderDefaults.Thumb(
-//                    interactionSource = remember { MutableInteractionSource() },
-//                    thumbSize = DpSize(24.dp, 24.dp),
-//                    colors = SliderDefaults.colors(
-//                        MaterialTheme.colorScheme.onPrimary
-//                    ),
-//                    modifier = Modifier
-//                        .size(24.dp)
-//                        .background(MaterialTheme.colorScheme.onPrimary, CircleShape)
-//                )
-//            },
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(horizontal = 20.dp),
-//            colors = SliderDefaults.colors(
-//                thumbColor = MaterialTheme.colorScheme.onPrimary,
-//                activeTrackColor = MaterialTheme.colorScheme.primaryContainer,
-//                inactiveTrackColor = MaterialTheme.colorScheme.onPrimary.copy(0.5f)
-//            )
-//        )
+        Text(
+            text = stringResource(R.string.screen_brightness),
+            color = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+        )
+        Spacer(Modifier.height(15.dp))
+
 
         CustomSlider(
             value = state.brightness,
@@ -232,7 +214,7 @@ fun ConfigurationScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
         ) {
-            viewModel.onEvent(ConfigurationEvent.ChangeBrightness(it))
+            viewModel.onEvent(ConfigurationEvent.ChangeBrightness(it, activity))
         }
     }
 }

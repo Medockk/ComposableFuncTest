@@ -37,6 +37,7 @@ import com.example.composablefunctest.Drag.DragScreen
 import com.example.composablefunctest.Home.HomeScreen
 import com.example.composablefunctest.RadioButton.RadioButtonScreen
 import com.example.composablefunctest.Route
+import com.example.composablefunctest.SegmentButton.SegmentButtonScreen
 import com.example.composablefunctest.SendNotification.SendNotificationScreen
 import com.example.composablefunctest.Splash.SplashScreen
 import com.example.composablefunctest.Video.VideoScreen
@@ -131,6 +132,9 @@ class MainActivity : ComponentActivity() {
                                 ConfigurationScreen(navController) { theme ->
                                     viewModel.setAppTheme(theme)
                                 }
+                            }
+                            composable(Route.SegmentButton.route) {
+                                SegmentButtonScreen(navController)
                             }
                         }
                         Spacer(Modifier.height(20.dp).background(MaterialTheme.colorScheme.primary))

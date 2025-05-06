@@ -13,6 +13,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.model.NetworkResult
 import com.example.domain.usecase.Configuration.IsApplicationInDarkThemeUseCase
 import com.example.domain.usecase.Configuration.SetApplicationThemeUseCase
+import com.example.domain.usecase.utils.WriteSettings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -24,7 +25,8 @@ import javax.inject.Inject
 class ConfigurationViewModel @Inject constructor(
     private val getApplicationThemeUseCase: IsApplicationInDarkThemeUseCase,
     private val setApplicationThemeUseCase: SetApplicationThemeUseCase,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val writeSettings: WriteSettings
 ) : ViewModel() {
 
     private val _state = mutableStateOf(ConfigurationState())
@@ -35,6 +37,7 @@ class ConfigurationViewModel @Inject constructor(
             try {
                 getTheme()
                 getLocale()
+                writeSettings()
             } catch (e: Exception) {
                 _state.value = state.value.copy(
                     exception = e.message.toString()
@@ -135,6 +138,7 @@ class ConfigurationViewModel @Inject constructor(
                 _state.value = state.value.copy(
                     brightness = _state.value.brightness + event.value
                 )
+                writeSettings(_state.value.brightness)
             }
         }
     }

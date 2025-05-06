@@ -46,4 +46,6 @@
     <string name="russian">Русский</string>
     <string name="horizontal">Горизонтальный</string>
     <string name="vertical">Вертикальный</string>
+    <string name="screen_brightness">Яркость экрана</string>
+    <string name="segment_button">Segment Button</string>
 </resources>
