@@ -15,4 +15,5 @@ sealed class Route(val route: String) {
     data object Animation: Route("Animation")
     data object Configuration: Route("Configuration")
     data object SegmentButton: Route("SegmentButton")
+    data object Note: Route("Note")
 }

@@ -31,6 +31,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DrawerValue
@@ -135,6 +136,11 @@ fun HomeScreen(
             Icons.Default.FavoriteBorder,
             stringResource(R.string.segment_button),
             { navController.navigate(Route.SegmentButton.route) }
+        ),
+        listOf(
+            Icons.Default.MailOutline,
+            stringResource(R.string.note),
+            { navController.navigate(Route.Note.route) }
         ),
     )
 

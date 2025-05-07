@@ -24,4 +24,6 @@
     <string name="vertical">Vertical</string>
     <string name="screen_brightness">Screen Brightness</string>
     <string name="segment_button">Segment Button</string>
+    <string name="note">Note</string>
+    <string name="create">Create</string>
 </resources>
