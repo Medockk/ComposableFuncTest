@@ -46,10 +46,10 @@ fun NoteScreen(
             title = state.noteTitle,
             description = state.noteDescription,
             onTitleChange = {
-                viewModel.onEvent(NoteEvent.EnterTitle(it))
+                viewModel.onEvent(NoteEvent.EnterNewNoteTitle(it))
             },
             onDescriptionChange = {
-                viewModel.onEvent(NoteEvent.EnterDescription(it))
+                viewModel.onEvent(NoteEvent.EnterNewNoteDescription(it))
             },
             onDismissRequest = {
                 viewModel.onEvent(NoteEvent.ChangeShowDialogState)
@@ -88,16 +88,16 @@ fun NoteScreen(
                     modifier = Modifier
                         .fillParentMaxWidth(),
                     refactorClick = {
-                        viewModel.onEvent(NoteEvent.RefactorNote(it))
+                        viewModel.onEvent(NoteEvent.SetIsRefactoringState(it))
                     },
                     deleteClick = {
                         viewModel.onEvent(NoteEvent.DeleteNote(it))
                     },
-                    onTitleChange = {
-
+                    onTitleChange = { newValue ->
+                        viewModel.onEvent(NoteEvent.ChangeNoteTitle(it, newValue))
                     },
-                    onDescriptionChange = {
-
+                    onDescriptionChange = { newValue ->
+                        viewModel.onEvent(NoteEvent.ChangeNoteDescription(it, newValue))
                     },
                     isChanging = it.isRefactoring
                 )

@@ -68,18 +68,16 @@ class NoteViewModel @Inject constructor(
 
     fun onEvent(event: NoteEvent) {
         when (event) {
-            is NoteEvent.EnterDescription -> {
+            is NoteEvent.EnterNewNoteDescription -> {
                 _state.value = state.value.copy(
                     noteDescription = event.value
                 )
             }
-
-            is NoteEvent.EnterTitle -> {
+            is NoteEvent.EnterNewNoteTitle -> {
                 _state.value = state.value.copy(
                     noteTitle = event.value
                 )
             }
-
             is NoteEvent.DeleteNote -> {
                 viewModelScope.launch(Dispatchers.IO) {
                     try {
@@ -97,9 +95,9 @@ class NoteViewModel @Inject constructor(
                     }
                 }
             }
-
-            is NoteEvent.RefactorNote -> {
+            is NoteEvent.SetIsRefactoringState -> {
                 val index = _state.value.notes.indexOf(event.noteModel)
+
                 _state.value = state.value.copy(
                     notes = _state.value.notes.toMutableList().apply {
                         set(
@@ -111,6 +109,7 @@ class NoteViewModel @Inject constructor(
                     }
                 )
             }
+
 
             is NoteEvent.CreateNote -> {
                 viewModelScope.launch(Dispatchers.IO) {
@@ -140,6 +139,74 @@ class NoteViewModel @Inject constructor(
             NoteEvent.ChangeShowDialogState -> {
                 _state.value = state.value.copy(
                     showCreateDialog = !_state.value.showCreateDialog
+                )
+            }
+
+            is NoteEvent.ChangeNoteDescription -> {
+
+                val note = _state.value.notes.first {
+                    it.noteId == event.note.noteId
+                }
+                val noteIndex = _state.value.notes.indexOf(note)
+
+                _state.value = state.value.copy(
+                    notes = _state.value.notes.toMutableList().apply {
+                        set(
+                            noteIndex,
+                            event.note.copy(
+                                noteDescription = event.newValue
+                            )
+                        )
+                    }
+                )
+
+                refactorNote(
+                    event.note.noteId,
+                    event.note.noteTitle,
+                    event.newValue.ifBlank { "Description" }
+                )
+            }
+
+            is NoteEvent.ChangeNoteTitle -> {
+
+                val note = _state.value.notes.first {
+                    it.noteId == event.note.noteId
+                }
+                val noteIndex = _state.value.notes.indexOf(note)
+
+                _state.value = state.value.copy(
+                    notes = _state.value.notes.toMutableList().apply {
+                        set(
+                            noteIndex,
+                            event.note.copy(
+                                noteTitle = event.newValue
+                            )
+                        )
+                    }
+                )
+                refactorNote(
+                    event.note.noteId,
+                    event.newValue.ifBlank { "Title" },
+                    event.note.noteDescription
+                )
+            }
+        }
+    }
+
+    private fun refactorNote(
+        noteId: Int, noteTitle: String,
+        noteDescription: String
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                refactorNoteUseCase(
+                    noteId,
+                    noteTitle,
+                    noteDescription
+                )
+            } catch (e: Exception) {
+                _state.value = state.value.copy(
+                    exception = e.message.toString()
                 )
             }
         }

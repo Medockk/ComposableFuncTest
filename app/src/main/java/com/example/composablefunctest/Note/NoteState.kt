@@ -10,5 +10,4 @@ data class NoteState(
     val showIndicator: Boolean = false,
     val exception: String = "",
     val showCreateDialog: Boolean = false,
-    val showRefactorDialog: Boolean = false,
 )

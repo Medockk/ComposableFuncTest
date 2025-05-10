@@ -58,7 +58,8 @@ fun Note(
                     .padding(15.dp)
             ) {
                 Column(
-                    horizontalAlignment = Alignment.Start
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier.weight(1f)
                 ) {
                     Text(
                         text = title,
@@ -72,7 +73,6 @@ fun Note(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                Spacer(Modifier.weight(1f))
                 IconButton(
                     onClick = refactorClick,
                     colors = IconButtonDefaults.iconButtonColors(Color.Transparent)
