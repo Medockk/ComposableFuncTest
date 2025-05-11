@@ -190,6 +190,10 @@ class NoteViewModel @Inject constructor(
                     event.note.noteDescription
                 )
             }
+
+            is NoteEvent.CreateWidget -> {
+
+            }
         }
     }
 

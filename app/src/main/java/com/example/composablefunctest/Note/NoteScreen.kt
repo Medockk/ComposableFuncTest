@@ -99,7 +99,10 @@ fun NoteScreen(
                     onDescriptionChange = { newValue ->
                         viewModel.onEvent(NoteEvent.ChangeNoteDescription(it, newValue))
                     },
-                    isChanging = it.isRefactoring
+                    isChanging = it.isRefactoring,
+                    createWidgetClick = {
+                        viewModel.onEvent(NoteEvent.CreateWidget(it))
+                    }
                 )
 
                 Spacer(Modifier.height(10.dp))

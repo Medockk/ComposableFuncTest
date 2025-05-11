@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.composablefunctest.R
+import com.example.composablefunctest.common.CustomButton
 import com.example.composablefunctest.common.CustomTextField
 
 @Composable
@@ -43,6 +44,7 @@ fun Note(
     onDescriptionChange: (String) -> Unit,
     refactorClick: () -> Unit,
     deleteClick: () -> Unit,
+    createWidgetClick: () -> Unit,
 ) {
     Card(
         modifier = modifier,
@@ -64,13 +66,15 @@ fun Note(
                     Text(
                         text = title,
                         color = MaterialTheme.colorScheme.primary,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
                     Spacer(Modifier.height(5.dp))
                     Text(
                         text = description,
                         color = MaterialTheme.colorScheme.primary,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
                 }
                 IconButton(
@@ -133,6 +137,15 @@ fun Note(
                         modifier = Modifier
                             .fillMaxWidth()
                     )
+
+                    Spacer(Modifier.height(5.dp))
+                    CustomButton(
+                        text = stringResource(R.string.create_widget),
+                        modifier = Modifier
+                            .align(Alignment.End)
+                    ) {
+                        createWidgetClick()
+                    }
                 }
             }
         }

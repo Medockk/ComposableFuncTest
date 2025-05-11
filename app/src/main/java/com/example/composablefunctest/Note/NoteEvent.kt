@@ -17,6 +17,7 @@ sealed class NoteEvent {
         val note: NoteModel,
         val newValue: String
     ) : NoteEvent()
+    data class CreateWidget(val note: NoteModel) : NoteEvent()
 
     data object CreateNote : NoteEvent()
     data object ChangeShowDialogState : NoteEvent()
